@@ -33,89 +33,118 @@ document.addEventListener('DOMContentLoaded', function() {
             text: "Science is not only a discipline of reason but also one of romance and passion.",
             author: "Stephen Hawking",
             category: "science"
-        },
+        },true
         ];    // Quote database
 
     
-   // DOM elements
-   const quoteText = document.getElementById('quote-text');
-   const quoteAuthor = document.getElementById('quote-author');
-   const generateBtn = document.getElementById('generate-btn');
-   const prevBtn = document.getElementById('prev-btn');
-   const nextBtn = document.getElementById('next-btn');
-   const categorySelect = document.getElementById('category');
+  // DOM elements
+  const quoteText = document.getElementById('quote-text');
+  const quoteAuthor = document.getElementById('quote-author');
+  const generateBtn = document.getElementById('generate-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const categorySelect = document.getElementById('category');
+  const themeBtn = document.getElementById('theme-btn');
+  const body = document.body;
 
-   // State variables
-   let currentQuoteIndex = -1;
-   let filteredQuotes = [];
-   let quoteHistory = [];
+  // State variables
+  let currentQuoteIndex = -1;
+  let filteredQuotes = [];
+  let quoteHistory = [];
+  let isDarkMode = false;
 
-   // Filter quotes based on category
-   function filterQuotes() {
-       const selectedCategory = categorySelect.value;
-       filteredQuotes = selectedCategory === 'all' 
-           ? [...quotes] 
-           : quotes.filter(quote => quote.category === selectedCategory);
-       
-       // Reset history when category changes
-       quoteHistory = [];
-       currentQuoteIndex = -1;
-   }
+  // Theme toggle function
+  function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+          body.setAttribute('data-theme', 'dark');
+          themeBtn.textContent = '☀️ Light Mode';
+          localStorage.setItem('theme', 'dark');
+      } else {
+          body.removeAttribute('data-theme');
+          themeBtn.textContent = '🌙 Dark Mode';
+          localStorage.setItem('theme', 'light');
+      }
+  }
 
-   // Display quote
-   function displayQuote(index) {
-       if (filteredQuotes.length === 0) {
-           quoteText.textContent = "No quotes available for this category.";
-           quoteAuthor.textContent = "";
-           return;
-       }
+  // Check for saved theme preference
+  function checkTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+          isDarkMode = true;
+          body.setAttribute('data-theme', 'dark');
+          themeBtn.textContent = '☀️ Light Mode';
+      }
+  }
 
-       const quote = filteredQuotes[index];
-       quoteText.textContent = `"${quote.text}"`;
-       quoteAuthor.textContent = `— ${quote.author}`;
-       
-       // Update navigation buttons state
-       prevBtn.disabled = index <= 0;
-       nextBtn.disabled = index >= filteredQuotes.length - 1;
-   }
+  // Filter quotes based on category
+  function filterQuotes() {
+      const selectedCategory = categorySelect.value;
+      filteredQuotes = selectedCategory === 'all' 
+          ? [...quotes] 
+          : quotes.filter(quote => quote.category === selectedCategory);
+      
+      // Reset history when category changes
+      quoteHistory = [];
+      currentQuoteIndex = -1;
+  }
 
-   // Generate random quote
-   function generateRandomQuote() {
-       if (filteredQuotes.length === 0) return;
-       
-       let randomIndex;
-       do {
-           randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-       } while (randomIndex === currentQuoteIndex && filteredQuotes.length > 1);
-       
-       currentQuoteIndex = randomIndex;
-       quoteHistory.push(currentQuoteIndex);
-       displayQuote(currentQuoteIndex);
-   }
+  // Display quote
+  function displayQuote(index) {
+      if (filteredQuotes.length === 0) {
+          quoteText.textContent = "No quotes available for this category.";
+          quoteAuthor.textContent = "";
+          return;
+      }
 
-   // Navigate to previous quote
-   function goToPreviousQuote() {
-       if (currentQuoteIndex > 0) {
-           currentQuoteIndex--;
-           displayQuote(currentQuoteIndex);
-       }
-   }
+      const quote = filteredQuotes[index];
+      quoteText.textContent = `"${quote.text}"`;
+      quoteAuthor.textContent = `— ${quote.author}`;
+      
+      // Update navigation buttons state
+      prevBtn.disabled = index <= 0;
+      nextBtn.disabled = index >= filteredQuotes.length - 1;
+  }
 
-   // Navigate to next quote
-   function goToNextQuote() {
-       if (currentQuoteIndex < filteredQuotes.length - 1) {
-           currentQuoteIndex++;
-           displayQuote(currentQuoteIndex);
-       }
-   }
+  // Generate random quote
+  function generateRandomQuote() {
+      if (filteredQuotes.length === 0) return;
+      
+      let randomIndex;
+      do {
+          randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+      } while (randomIndex === currentQuoteIndex && filteredQuotes.length > 1);
+      
+      currentQuoteIndex = randomIndex;
+      quoteHistory.push(currentQuoteIndex);
+      displayQuote(currentQuoteIndex);
+  }
 
-   // Event listeners
-   generateBtn.addEventListener('click', generateRandomQuote);
-   prevBtn.addEventListener('click', goToPreviousQuote);
-   nextBtn.addEventListener('click', goToNextQuote);
-   categorySelect.addEventListener('change', filterQuotes);
+  // Navigate to previous quote
+  function goToPreviousQuote() {
+      if (currentQuoteIndex > 0) {
+          currentQuoteIndex--;
+          displayQuote(currentQuoteIndex);
+      }
+  }
 
-   // Initialize
-   filterQuotes();
-   generateRandomQuote();
+  // Navigate to next quote
+  function goToNextQuote() {
+      if (currentQuoteIndex < filteredQuotes.length - 1) {
+          currentQuoteIndex++;
+          displayQuote(currentQuoteIndex);
+      }
+  }
+
+  // Event listeners
+  generateBtn.addEventListener('click', generateRandomQuote);
+  prevBtn.addEventListener('click', goToPreviousQuote);
+  nextBtn.addEventListener('click', goToNextQuote);
+  categorySelect.addEventListener('change', filterQuotes);
+  themeBtn.addEventListener('click', toggleTheme);
+
+  // Initialize
+  checkTheme();
+  filterQuotes();
+  generateRandomQuote();
 });
