@@ -3,9 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quotes Generator</title>
+    <title>Random Quote Generator</title>
+    <link rel="stylesheet" href="quote.css">
+   
 </head>
 <body>
-    <h1>Quote Generator</h1>
+    <div class="container">
+        <h1>Random Quote Generator</h1>
+        
+        <div class="category-selector">
+            <select id="category">
+                <option value="all">All Categories</option>
+                <option value="inspiration">Inspiration</option>
+                <option value="motivation">Motivation</option>
+                <option value="science">Science</option>
+               
+            </select>
+        </div>
+        
+        <div class="quote-container">
+            <p class="quote-text" id="quote-text">Click the button below to generate a random quote!</p>
+            <p class="quote-author" id="quote-author"></p>
+        </div>
+        
+        <div class="button-container">
+            <button id="prev-btn">Previous</button>
+            <button id="generate-btn">Random Quote</button>
+            <button id="next-btn">Next</button>
+        </div>
+        
+    </div>
 </body>
+<script src="quote.js"></script>
 </html>
