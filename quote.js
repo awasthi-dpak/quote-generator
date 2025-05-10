@@ -33,25 +33,34 @@ document.addEventListener('DOMContentLoaded', function() {
             text: "Science is not only a discipline of reason but also one of romance and passion.",
             author: "Stephen Hawking",
             category: "science"
-        },true
+        }
         ];    // Quote database
 
     
-  // DOM elements
-  const quoteText = document.getElementById('quote-text');
-  const quoteAuthor = document.getElementById('quote-author');
-  const generateBtn = document.getElementById('generate-btn');
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const categorySelect = document.getElementById('category');
-  const themeBtn = document.getElementById('theme-btn');
-  const body = document.body;
+   // DOM elements
+   const quoteText = document.getElementById('quote-text');
+   const quoteAuthor = document.getElementById('quote-author');
+   const generateBtn = document.getElementById('generate-btn');
+   const prevBtn = document.getElementById('prev-btn');
+   const nextBtn = document.getElementById('next-btn');
+   const categorySelect = document.getElementById('category');
+   const themeBtn = document.getElementById('theme-btn');
+   const body = document.body;
+   
+   // Zoom controls
+   const zoomInBtn = document.getElementById('zoom-in-btn');
+   const zoomOutBtn = document.getElementById('zoom-out-btn');
+   const zoomResetBtn = document.getElementById('zoom-reset-btn');
 
-  // State variables
-  let currentQuoteIndex = -1;
-  let filteredQuotes = [];
-  let quoteHistory = [];
-  let isDarkMode = false;
+   // State variables
+   let currentQuoteIndex = -1;
+   let filteredQuotes = [];
+   let quoteHistory = [];
+   let isDarkMode = false;
+   let currentZoomLevel = 1;
+   const ZOOM_INCREMENT = 0.1;
+   const MAX_ZOOM = 1.5;
+   const MIN_ZOOM = 0.8;
 
   // Theme toggle function
   function toggleTheme() {
@@ -136,15 +145,45 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   }
 
-  // Event listeners
-  generateBtn.addEventListener('click', generateRandomQuote);
-  prevBtn.addEventListener('click', goToPreviousQuote);
-  nextBtn.addEventListener('click', goToNextQuote);
-  categorySelect.addEventListener('change', filterQuotes);
-  themeBtn.addEventListener('click', toggleTheme);
+  
 
-  // Initialize
-  checkTheme();
-  filterQuotes();
-  generateRandomQuote();
+  function updateZoom() {
+    quoteText.style.fontSize = `${1.5 * currentZoomLevel}rem`;
+    zoomOutBtn.disabled = currentZoomLevel <= MIN_ZOOM;
+    zoomInBtn.disabled = currentZoomLevel >= MAX_ZOOM;
+}
+
+function zoomIn() {
+    if (currentZoomLevel < MAX_ZOOM) {
+        currentZoomLevel += ZOOM_INCREMENT;
+        updateZoom();
+    }
+}
+
+function zoomOut() {
+    if (currentZoomLevel > MIN_ZOOM) {
+        currentZoomLevel -= ZOOM_INCREMENT;
+        updateZoom();
+    }
+}
+
+function resetZoom() {
+    currentZoomLevel = 1;
+    updateZoom();
+}
+
+   // Event listeners
+   generateBtn.addEventListener('click', generateRandomQuote);
+   prevBtn.addEventListener('click', goToPreviousQuote);
+   nextBtn.addEventListener('click', goToNextQuote);
+   categorySelect.addEventListener('change', filterQuotes);
+   themeBtn.addEventListener('click', toggleTheme);
+   zoomInBtn.addEventListener('click', zoomIn);
+   zoomOutBtn.addEventListener('click', zoomOut);
+   zoomResetBtn.addEventListener('click', resetZoom);
+
+   // Initialize
+   checkTheme();
+   filterQuotes();
+   generateRandomQuote();
 });

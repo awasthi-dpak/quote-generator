@@ -143,3 +143,20 @@ button:hover {
     background-color: var(--text-color);
     color: var(--bg-color);
 }
+
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 15px;
+}
+
+#zoom-out-btn, #zoom-reset-btn, #zoom-in-btn {
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    background-color: var(--nav-button-bg);
+}
+
+#zoom-out-btn:hover, #zoom-reset-btn:hover, #zoom-in-btn:hover {
+    background-color: var(--nav-button-hover);
+}
